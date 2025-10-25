@@ -1,29 +1,45 @@
-# Titlu proiect
-### Student(i)
+## Jurnal medical pentru animale - Java SE
+
+Macovei Oana-Georgiana
 
 ## Descriere
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+Scopul aplicatiei este de a avea la indemana intr-un mod organizat toate informatiile necesare pentru animal. Utilizatorul va putea adauga informatii de baza, despre vaccinuri, stilul de mancare si un istoric legat de interventii medicale.
+
+Aplicatia va fi pe desktop cu interfata grafica JavaFX si va implementa o baza de date locala SQLite
 
 ## Obiective
-Lorem ipsum
 
-* ob1
-* ob2
-* ob3
-    - sob31
-    - sob32
-    - ...
-* ....
+* operatii CRUD pentru fiecare sectiune din aplicatie
+* rapoarte pentru vizualizarea vaccinurilor si istoricul medical al unui animal
+* cautarea unui animal in functie de specie, rasa, nume
+* salvarea datelor intr-o baza de date locala
+* implementarea unei interfete grafice
+* implementarea testelor JUnit
+* documentare codului prin utilizarea JavaDoc
 
 ## Arhitectura
-Lorem ipsum ...
 
-![Alt text](documentatie-ghid-utlizare-raport/diagrama-clase.png)
+<img width="787" height="563" alt="image" src="https://github.com/user-attachments/assets/218afde6-3799-46c1-990f-b8f32047c1e4" />
 
-Lorem ipsum ...
+* Clasa Animal are relatie de asociere cu fiecare dintre clasele Vaccin, IstoricMedical, Hrana
+* 'idAnimal' va reprezenta legatura dintre clasa respectiva si clasa Animal
 
 ## Functionalitati/Exemple utilizare
-Lorem ipsum
+Cateva din functionalitati sunt:
 
+1. Adaugare animal nou
+* se introduc informatii despre un animal, precum nume, specie, rasa, varsta greutate, iar aplicatia le salveaza in baza de date SQLite
+
+2. Cautare
+* se poate cauta un animal dupa nume, specie, rasa, iar rezultatele se actualizeaza in lista
+
+3. Rapoarte
+* vizualizarea vaccinurilor pentru un animal selectat
+* vizualizarea istoricului medical 
+* vizualizarea hranei unui animal
 ### Resurse
 Markdown Guide, [Online] Available: https://www.markdownguide.org/basic-syntax/ [accesed: Mar 14, 1706]
+
+Documentatie SQLite - https://sqlite.org/docs.html
+
+Documentatie JavaFX - https://openjfx.io
