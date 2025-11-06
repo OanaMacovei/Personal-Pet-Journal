@@ -1,3 +1,5 @@
+# GMihai: Nota descriere proiect 10
+
 ## Jurnal medical pentru animale - Java SE
 
 Macovei Oana-Georgiana
