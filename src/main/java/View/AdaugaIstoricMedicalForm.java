@@ -4,6 +4,7 @@ import java.awt.Frame;
 import java.text.SimpleDateFormat;
 import dao.IstoricMedicalData;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -37,7 +38,15 @@ public class AdaugaIstoricMedicalForm extends javax.swing.JDialog {
         dateChooser.setDate(new Date());
         realTimeValidation(motivIstoricTextField);
         realTimeValidation(numeMedicTextField);
-        realTimeValidation(diagnosticIstoricTextField);        
+        realTimeValidation(diagnosticIstoricTextField);    
+        
+        Styles.stilizeazaPanouFormular(jPanel1, jPanel2);
+        Styles.stilizeazaTextFields(motivIstoricTextField, numeMedicTextField, diagnosticIstoricTextField);
+        Styles.stilizeazaTextArea(tratamentIstoricTextField, jScrollPane1);
+        Styles.stilizeazaButoane(adaugaIstoricButton, anulareIstoricButton);
+        Styles.stilizeazaLabeluriBold(jLabel1, jLabel2, jLabel3, jLabel4, jLabel5);
+        adaugaIstoricButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        anulareIstoricButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     

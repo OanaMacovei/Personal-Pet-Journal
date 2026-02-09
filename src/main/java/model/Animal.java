@@ -139,18 +139,6 @@ public class Animal {
         this.vaccinuri = new ArrayList<>();
     }
     
-//    @Override
-//    public String toString(){
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("Animal: ").append(nume).append(" ID: ").append(ID).append("\n");
-//        sb.append("Age: ").append(varsta).append("\n");
-//        sb.append("Species: ").append(specie).append("\n");
-//        sb.append("Race: ").append(rasa).append("\n");
-//        sb.append("Gender: ").append(gen).append("\n");
-//        sb.append("Weight: ").append(greutate).append("\n");
-//        return sb.toString();
-//    }
-    
     /**
      * Metoda necesara compararii.
      * @return ID-ul animalului ca valoare hash
@@ -176,12 +164,4 @@ public class Animal {
         Animal other = (Animal) obj;
         return this.ID.equals(other.ID);
     }
-    
-//    /**
-//     * Adauga vaccin in lista de vaccinuri.
-//     * @param vaccin 
-//     */
-//    public void adaugareVaccin(Vaccin vaccin){
-//        this.vaccinuri.add(vaccin);
-//    }
 }

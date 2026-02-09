@@ -30,7 +30,9 @@ import javax.swing.table.TableColumn;
 import View.LoginView;
 import Controller.Login;
 import dao.UsersDao;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import javax.swing.table.TableRowSorter;
 import model.DateUtilizator;
 
 /**
@@ -55,6 +57,7 @@ public class MainFrame extends javax.swing.JFrame {
     IstoricMedicalData istoricMedicalDao = new IstoricMedicalData();
     Integer ID_User;
     String rol;
+    TableRowSorter<TabelAnimaleModel> sorter;
     
     /**
      * Constructor ce initializeaza componentele, preia datele si configureaza
@@ -82,6 +85,9 @@ public class MainFrame extends javax.swing.JFrame {
         realTimeValidation(cantitateHranaTextField);
         realTimeValidation(nr_ziHranaTextField);
       
+        sorter = new TableRowSorter<>((TabelAnimaleModel) TabelAnimale.getModel());
+        TabelAnimale.setRowSorter(sorter);
+        searchDocumentListener();
         
         TabelAnimale.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
@@ -103,7 +109,7 @@ public class MainFrame extends javax.swing.JFrame {
         Styles.stilizeazaTabel(TabelVaccinuri, jScrollPane3);
         Styles.stilizeazaTabel(TabelIstoricMedical, jScrollPane1);
 
-        Styles.stilizeazaButoane(hranaButton, fisaMedicalaButton, vaccinuriButton, 
+        Styles.stilizeazaButoane(hranaButton, vaccinuriButton, fisaMedicalaButton, 
                                  backButton, adaugaVaccinButton, editareVaccinButton, stergereVaccinButton, delogareButton,
                                  istoricBackButton, adaugaIstoricButton, stergeIstoricButton, editeazaIstoricButton,
                                  creeareEditareHranaButton, stergeHranaButton, backHranaButton,
@@ -120,6 +126,12 @@ public class MainFrame extends javax.swing.JFrame {
         Styles.aplicaBorduraSectiune(oreAdministrarePanel, "Ore Administrare", Styles.DEEP_TEAL);
         
         Styles.stilizeazaLabeluriBold(jLabel9, jLabel5, jLabel2, jLabel11, jLabel4, jLabel6, jLabel8, jLabel10);
+        Styles.stilizeazaLabeluriBold(dataIstoricLabel, medicIstoricLabel);
+        Styles.stilizeazaTextFields(diagnosticIstoricTextField);
+        Styles.stilizeazaTextArea(tratamentIstoricTextArea, jScrollPane5);
+        
+        this.validate();
+        this.repaint();
     }
     
     /**
@@ -169,8 +181,8 @@ public class MainFrame extends javax.swing.JFrame {
         greutateLabel.setVisible(false);
         genLabel.setVisible(false);
         numeLabel.setVisible(false);
-        vaccinuriButton.setVisible(false);
         hranaButton.setVisible(false);
+        vaccinuriButton.setVisible(false);
         fisaMedicalaButton.setVisible(false);
         
         tratamentIstoricTextArea.setEditable(false);
@@ -194,21 +206,26 @@ public class MainFrame extends javax.swing.JFrame {
             editareAnimalButton.setVisible(false);
             stergeAnimalButton.setVisible(false);
             
-            vaccinuriButton.setVisible(false);
             hranaButton.setVisible(false);
+            vaccinuriButton.setVisible(false);
             fisaMedicalaButton.setVisible(true);
             
             java.awt.GridBagLayout layout = (java.awt.GridBagLayout) detaliiPanou.getLayout();
-                java.awt.GridBagConstraints gbc = layout.getConstraints(fisaMedicalaButton);
+            java.awt.GridBagConstraints gbc = layout.getConstraints(fisaMedicalaButton);
 
-                // Modificăm gbc pentru a-l centra
-                gbc.gridx = 0; // Îl punem pe prima coloană
-                gbc.gridwidth = 3; // Îi spunem să se întindă pe lățimea celor 3 coloane inițiale
-                gbc.anchor = java.awt.GridBagConstraints.CENTER; // Centrare absolută
-                gbc.insets = new java.awt.Insets(100, 0, 100, 0); // Păstrăm spațierea de jos
+            gbc.gridx = 0;
+            gbc.gridwidth = 3;
+            gbc.anchor = java.awt.GridBagConstraints.CENTER;
+            gbc.insets = new java.awt.Insets(100, 0, 100, 0);
 
-                layout.setConstraints(fisaMedicalaButton, gbc);
+            layout.setConstraints(fisaMedicalaButton, gbc);
             
+            Dimension dimensiuneMare = new Dimension(500, 30);
+    
+            searchTextField.setPreferredSize(dimensiuneMare);
+            searchTextField.setMinimumSize(dimensiuneMare);
+
+            searchPanel.setPreferredSize(dimensiuneMare);
         }
         else {
             adaugaIstoricButton.setVisible(false);
@@ -283,9 +300,9 @@ public class MainFrame extends javax.swing.JFrame {
             rasaLabelInfo.setText(""); 
             greutateLabelInfo.setText("");
             genLabelInfo.setText("");
-            vaccinuriButton.setVisible(false);
-            fisaMedicalaButton.setVisible(false);
             hranaButton.setVisible(false);
+            fisaMedicalaButton.setVisible(false);
+            vaccinuriButton.setVisible(false);
             rasaLabelInfo.setVisible(false);
             greutateLabelInfo.setVisible(false);
             genLabelInfo.setVisible(false);
@@ -586,10 +603,12 @@ public class MainFrame extends javax.swing.JFrame {
         tratamentIstoricTextArea = new javax.swing.JTextArea();
         buttonsPanel = new javax.swing.JPanel();
         delogareButton = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 0), new java.awt.Dimension(317, 0), new java.awt.Dimension(25, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 0), new java.awt.Dimension(200, 0), new java.awt.Dimension(25, 32767));
         adaugaAnimalButton = new javax.swing.JButton();
         editareAnimalButton = new javax.swing.JButton();
         stergeAnimalButton = new javax.swing.JButton();
+        searchPanel = new javax.swing.JPanel();
+        searchTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -618,41 +637,52 @@ public class MainFrame extends javax.swing.JFrame {
 
         detaliiPanou.setLayout(new java.awt.GridBagLayout());
 
-        vaccinuriButton.setText("Vaccinuri");
+        vaccinuriButton.setText("Vaccin");
+        vaccinuriButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        vaccinuriButton.setOpaque(true);
+        vaccinuriButton.setPreferredSize(new java.awt.Dimension(76, 27));
         vaccinuriButton.addActionListener(this::vaccinuriButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        gridBagConstraints.insets = new java.awt.Insets(100, 0, 100, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
+        gridBagConstraints.insets = new java.awt.Insets(65, 0, 65, 0);
         detaliiPanou.add(vaccinuriButton, gridBagConstraints);
 
         fisaMedicalaButton.setText("Fisa Medicala");
+        fisaMedicalaButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         fisaMedicalaButton.addActionListener(this::fisaMedicalaButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
+        gridBagConstraints.insets = new java.awt.Insets(65, 0, 65, 0);
         detaliiPanou.add(fisaMedicalaButton, gridBagConstraints);
 
         hranaButton.setText("Hrana");
+        hranaButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         hranaButton.addActionListener(this::hranaButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
+        gridBagConstraints.insets = new java.awt.Insets(65, 0, 65, 0);
         detaliiPanou.add(hranaButton, gridBagConstraints);
 
         rasaLabel.setText("Rasa:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(25, 10, 13, 10);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 11);
         detaliiPanou.add(rasaLabel, gridBagConstraints);
 
         genLabel.setText("Gen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(13, 10, 13, 10);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 11);
         detaliiPanou.add(genLabel, gridBagConstraints);
 
         numeLabel.setText("Nume");
@@ -663,14 +693,15 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 30, 10);
+        gridBagConstraints.insets = new java.awt.Insets(33, 0, 33, 0);
         detaliiPanou.add(numeLabel, gridBagConstraints);
 
         greutateLabel.setText("Greutate:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(13, 10, 13, 10);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 11);
         detaliiPanou.add(greutateLabel, gridBagConstraints);
 
         rasaLabelInfo.setText("rasaLabelData");
@@ -678,7 +709,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 10;
-        gridBagConstraints.insets = new java.awt.Insets(25, 10, 13, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 12);
         detaliiPanou.add(rasaLabelInfo, gridBagConstraints);
 
         greutateLabelInfo.setText("greutateLabelData");
@@ -686,7 +717,6 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 2;
-        gridBagConstraints.insets = new java.awt.Insets(13, 10, 13, 10);
         detaliiPanou.add(greutateLabelInfo, gridBagConstraints);
 
         genLabelInfo.setText("genLabelData");
@@ -694,7 +724,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 1;
-        gridBagConstraints.insets = new java.awt.Insets(13, 10, 13, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 12);
         detaliiPanou.add(genLabelInfo, gridBagConstraints);
 
         containerDinamic.add(detaliiPanou, "cardDetalii");
@@ -702,14 +732,17 @@ public class MainFrame extends javax.swing.JFrame {
         vaccinuriPanou.setLayout(new java.awt.BorderLayout());
 
         adaugaVaccinButton.setText("Adauga");
+        adaugaVaccinButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         adaugaVaccinButton.addActionListener(this::adaugaVaccinButtonActionPerformed);
         vaccinuriButtonsPanel.add(adaugaVaccinButton);
 
         editareVaccinButton.setText("Editeaza");
+        editareVaccinButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         editareVaccinButton.addActionListener(this::editareVaccinButtonActionPerformed);
         vaccinuriButtonsPanel.add(editareVaccinButton);
 
         stergereVaccinButton.setText("Sterge");
+        stergereVaccinButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         stergereVaccinButton.addActionListener(this::stergereVaccinButtonActionPerformed);
         vaccinuriButtonsPanel.add(stergereVaccinButton);
 
@@ -718,6 +751,7 @@ public class MainFrame extends javax.swing.JFrame {
         vaccinuriBackButtonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         backButton.setText("Back");
+        backButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         backButton.addActionListener(this::backButtonActionPerformed);
         vaccinuriBackButtonPanel.add(backButton);
 
@@ -737,6 +771,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         ));
         TabelVaccinuri.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        TabelVaccinuri.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jScrollPane3.setViewportView(TabelVaccinuri);
 
         tabelPanel.add(jScrollPane3);
@@ -750,15 +785,18 @@ public class MainFrame extends javax.swing.JFrame {
         hranaBackButtonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         backHranaButton.setText("Back");
+        backHranaButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         backHranaButton.addActionListener(this::backHranaButtonActionPerformed);
         hranaBackButtonPanel.add(backHranaButton);
 
         hranaPanou.add(hranaBackButtonPanel, java.awt.BorderLayout.PAGE_START);
 
+        creeareEditareHranaButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         creeareEditareHranaButton.addActionListener(this::creeareEditareHranaButtonActionPerformed);
         hranaButtonsPanel.add(creeareEditareHranaButton);
 
         stergeHranaButton.setText("Sterge");
+        stergeHranaButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         stergeHranaButton.addActionListener(this::stergeHranaButtonActionPerformed);
         hranaButtonsPanel.add(stergeHranaButton);
 
@@ -815,10 +853,12 @@ public class MainFrame extends javax.swing.JFrame {
         oreAdministrarePanel.add(oreAdministrareScrollPane, java.awt.BorderLayout.CENTER);
 
         adaugareOraButton.setText("+");
+        adaugareOraButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         adaugareOraButton.addActionListener(this::adaugareOraButtonActionPerformed);
         jPanel3.add(adaugareOraButton);
 
         stergereOraButton.setText("-");
+        stergereOraButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         stergereOraButton.addActionListener(this::stergereOraButtonActionPerformed);
         jPanel3.add(stergereOraButton);
 
@@ -881,21 +921,25 @@ public class MainFrame extends javax.swing.JFrame {
         istoricBackButtonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         istoricBackButton.setText("Back");
+        istoricBackButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         istoricBackButton.addActionListener(this::istoricBackButtonActionPerformed);
         istoricBackButtonPanel.add(istoricBackButton);
 
         istoricMedicalPanou.add(istoricBackButtonPanel, java.awt.BorderLayout.NORTH);
 
         adaugaIstoricButton.setText("Adauga");
+        adaugaIstoricButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         adaugaIstoricButton.setPreferredSize(new java.awt.Dimension(80, 27));
         adaugaIstoricButton.addActionListener(this::adaugaIstoricButtonActionPerformed);
         istoricButtonPanel.add(adaugaIstoricButton);
 
         editeazaIstoricButton.setText("Editeaza");
+        editeazaIstoricButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         editeazaIstoricButton.addActionListener(this::editeazaIstoricButtonActionPerformed);
         istoricButtonPanel.add(editeazaIstoricButton);
 
         stergeIstoricButton.setText("Sterge");
+        stergeIstoricButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         stergeIstoricButton.setPreferredSize(new java.awt.Dimension(80, 27));
         stergeIstoricButton.addActionListener(this::stergeIstoricButtonActionPerformed);
         istoricButtonPanel.add(stergeIstoricButton);
@@ -1014,21 +1058,34 @@ public class MainFrame extends javax.swing.JFrame {
         buttonsPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         delogareButton.setText("Log out");
+        delogareButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         delogareButton.addActionListener(this::delogareButtonActionPerformed);
         buttonsPanel.add(delogareButton);
         buttonsPanel.add(filler1);
 
         adaugaAnimalButton.setText("Adauga");
+        adaugaAnimalButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         adaugaAnimalButton.addActionListener(this::adaugaAnimalButtonActionPerformed);
         buttonsPanel.add(adaugaAnimalButton);
 
         editareAnimalButton.setText("Editare");
+        editareAnimalButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         editareAnimalButton.addActionListener(this::editareAnimalButtonActionPerformed);
         buttonsPanel.add(editareAnimalButton);
 
         stergeAnimalButton.setText("Sterge");
+        stergeAnimalButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         stergeAnimalButton.addActionListener(this::stergeAnimalButtonActionPerformed);
         buttonsPanel.add(stergeAnimalButton);
+
+        searchPanel.setLayout(new java.awt.BorderLayout());
+
+        searchTextField.setText("Search");
+        searchTextField.setPreferredSize(new java.awt.Dimension(200, 26));
+        searchTextField.addActionListener(this::searchTextFieldActionPerformed);
+        searchPanel.add(searchTextField, java.awt.BorderLayout.CENTER);
+
+        buttonsPanel.add(searchPanel);
 
         getContentPane().add(buttonsPanel, java.awt.BorderLayout.PAGE_END);
 
@@ -1093,7 +1150,7 @@ public class MainFrame extends javax.swing.JFrame {
      * @param evt 
      */
     private void adaugaAnimalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adaugaAnimalButtonActionPerformed
-        AdaugaAnimalForm adaugareForm = new AdaugaAnimalForm(this);
+        AdaugaAnimalForm adaugareForm = new AdaugaAnimalForm(this, ID_User);
         adaugareForm.pack();
         adaugareForm.setLocationRelativeTo(this);
         adaugareForm.setVisible(true);
@@ -1121,28 +1178,6 @@ public class MainFrame extends javax.swing.JFrame {
         editareForm.setVisible(true);
         incarcareDate();
     }//GEN-LAST:event_editareAnimalButtonActionPerformed
-
-    /**
-     * Schimbarea panoului daca se apasa butonul de Vaccinuri
-     * @param evt Eveniment
-     */
-    private void vaccinuriButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vaccinuriButtonActionPerformed
-        int randSelectat = TabelAnimale.getSelectedRow();
-        
-        
-        if (randSelectat < 0){
-            JOptionPane.showMessageDialog(this, "Selecteaza un animal intai!", "Eroare", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        CardLayout cardLayout = (CardLayout) containerDinamic.getLayout();
-        cardLayout.show(containerDinamic, "cardVaccinuri");
-        
-        int modelRow = TabelAnimale.convertRowIndexToModel(randSelectat);
-        Animal animalSelectat = tabelAnimaleModel.getAnimal(modelRow);
-        incarcareDateVaccinuri(animalSelectat.getID());
-        TabelVaccinuri.setRowHeight(25);
-    }//GEN-LAST:event_vaccinuriButtonActionPerformed
 
     /**
      * Revenirea la panoul principal de detalii
@@ -1439,36 +1474,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_stergeHranaButtonActionPerformed
 
     /**
-     * Schimbarea panoului daca se apasa butonul de Fisa Medicala
-     * @param evt Eveniment
-     */
-    private void fisaMedicalaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fisaMedicalaButtonActionPerformed
-        int randSelectat = TabelAnimale.getSelectedRow();
-        if (randSelectat == -1){
-            return;
-        }
-        
-        if (randSelectat < 0){
-            JOptionPane.showMessageDialog(this, "Selecteaza un animal intai!", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        TabelIstoricMedical.getSelectionModel().clearSelection();
-        
-        int modelRow = TabelAnimale.convertRowIndexToModel(randSelectat);
-        Animal animalSelectat = tabelAnimaleModel.getAnimal(modelRow);
-        incarcareDateIstoricMedical(animalSelectat.getID());
-
-        diagnosticIstoricTextField.setText("");
-        tratamentIstoricTextArea.setText("");
-        medicIstoricLabel.setText("");
-        dataIstoricLabel.setText("");
-
-        CardLayout cardLayour = (CardLayout) containerDinamic.getLayout();
-        cardLayour.show(containerDinamic, "cardIstoricMedical");
-        
-    }//GEN-LAST:event_fisaMedicalaButtonActionPerformed
-
-    /**
      * Revenirea la panoul principal de datalii
      * @param evt Eveniment
      */
@@ -1547,6 +1552,7 @@ public class MainFrame extends javax.swing.JFrame {
         int randSelectat = TabelAnimale.getSelectedRow(); 
         int randIstoric = TabelIstoricMedical.getSelectedRow();
         if (randIstoric < 0){
+            JOptionPane.showMessageDialog(this, "Selecteaza o inregistrare intai!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -1579,6 +1585,89 @@ public class MainFrame extends javax.swing.JFrame {
             });
         }
     }//GEN-LAST:event_delogareButtonActionPerformed
+
+    private void aplicareFiltre(){
+        String searchText = searchTextField.getText().trim();
+        if (searchText.isEmpty()){
+            sorter.setRowFilter(null);
+        }
+        else {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
+        }
+    }
+    
+    private void searchDocumentListener(){
+        searchTextField.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e){
+                aplicareFiltre();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e){
+                aplicareFiltre();
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e){
+                aplicareFiltre();
+            }
+        });
+    }
+    
+    private void searchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextFieldActionPerformed
+    }//GEN-LAST:event_searchTextFieldActionPerformed
+
+    /**
+     * Schimbarea panoului daca se apasa butonul de Fisa Medicala
+     * @param evt Eveniment
+     */
+    private void fisaMedicalaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fisaMedicalaButtonActionPerformed
+        int randSelectat = TabelAnimale.getSelectedRow();
+        if (randSelectat == -1){
+            return;
+        }
+
+        if (randSelectat < 0){
+            JOptionPane.showMessageDialog(this, "Selecteaza un animal intai!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        TabelIstoricMedical.getSelectionModel().clearSelection();
+
+        int modelRow = TabelAnimale.convertRowIndexToModel(randSelectat);
+        Animal animalSelectat = tabelAnimaleModel.getAnimal(modelRow);
+        incarcareDateIstoricMedical(animalSelectat.getID());
+
+        diagnosticIstoricTextField.setText("");
+        tratamentIstoricTextArea.setText("");
+        medicIstoricLabel.setText("");
+        dataIstoricLabel.setText("");
+
+        CardLayout cardLayour = (CardLayout) containerDinamic.getLayout();
+        cardLayour.show(containerDinamic, "cardIstoricMedical");
+
+    }//GEN-LAST:event_fisaMedicalaButtonActionPerformed
+
+    /**
+     * Schimbarea panoului daca se apasa butonul de Vaccinuri
+     * @param evt Eveniment
+     */
+    private void vaccinuriButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vaccinuriButtonActionPerformed
+        int randSelectat = TabelAnimale.getSelectedRow();
+
+        if (randSelectat < 0){
+            JOptionPane.showMessageDialog(this, "Selecteaza un animal intai!", "Eroare", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        CardLayout cardLayout = (CardLayout) containerDinamic.getLayout();
+        cardLayout.show(containerDinamic, "cardVaccinuri");
+
+        int modelRow = TabelAnimale.convertRowIndexToModel(randSelectat);
+        Animal animalSelectat = tabelAnimaleModel.getAnimal(modelRow);
+        incarcareDateVaccinuri(animalSelectat.getID());
+        TabelVaccinuri.setRowHeight(25);
+    }//GEN-LAST:event_vaccinuriButtonActionPerformed
 
     /**
      * Sorteaza alfabetic orele de administrare afisate in lista
@@ -1691,6 +1780,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane oreAdministrareScrollPane;
     private javax.swing.JLabel rasaLabel;
     private javax.swing.JLabel rasaLabelInfo;
+    private javax.swing.JPanel searchPanel;
+    private javax.swing.JTextField searchTextField;
     private javax.swing.JSplitPane splitPaneCentral;
     private javax.swing.JButton stergeAnimalButton;
     private javax.swing.JButton stergeHranaButton;

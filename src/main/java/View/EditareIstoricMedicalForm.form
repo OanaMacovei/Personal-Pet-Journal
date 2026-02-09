@@ -40,7 +40,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actualizareIstoricButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="anulareIstoricTextField">
+        <Component class="javax.swing.JButton" name="anulareIstoricButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Anulare"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -48,7 +48,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="anulareIstoricTextFieldActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="anulareIstoricButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

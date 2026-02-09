@@ -9,6 +9,7 @@ package model;
 public class DateUtilizator {
     static Integer ID_User;
     static String username, rol;
+    String password, email, nrTelefon, nume;
     
     /**
      * Constructor ce initializeaza un obiect.
@@ -19,6 +20,15 @@ public class DateUtilizator {
     public DateUtilizator(Integer ID_User, String username, String rol){
         this.ID_User = ID_User;
         this.username = username;
+        this.rol = rol;
+    }
+    
+    public DateUtilizator(String username, String password, String email, String nrTelefon, String nume, String rol){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.nrTelefon = nrTelefon;
+        this.nume = nume;
         this.rol = rol;
     }
     

@@ -2,6 +2,7 @@
 package View;
 import dao.VaccinuriData;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Frame;
 import java.text.SimpleDateFormat;
 import model.Vaccin;
@@ -38,6 +39,14 @@ public class EditareVaccinForm extends javax.swing.JDialog {
         initComponents();
         incarcareForm();
         realTimeValidation(numeTextField);
+        
+        Styles.stilizeazaPanouFormular(jPanel1, jPanel2);
+        Styles.stilizeazaTextFields(numeTextField);
+        Styles.stilizeazaButoane(actualizareVaccinButton, anulareEditareVaccinButton);
+        Styles.stilizeazaLabeluriBold(numeLabel, dataLabel);
+        dateChooser.getCalendarButton().setBackground(Styles.DARK_GREY);
+        actualizareVaccinButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        anulareEditareVaccinButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
     
     /**
@@ -101,7 +110,7 @@ public class EditareVaccinForm extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         numeLabel = new javax.swing.JLabel();
         numeTextField = new javax.swing.JTextField();
-        dataTextField = new javax.swing.JLabel();
+        dataLabel = new javax.swing.JLabel();
         dateChooser = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -121,7 +130,7 @@ public class EditareVaccinForm extends javax.swing.JDialog {
 
         numeLabel.setText("Nume:");
 
-        dataTextField.setText("Data administrare:");
+        dataLabel.setText("Data administrare:");
 
         dateChooser.setDateFormatString("dd/MM/yyyy");
 
@@ -133,7 +142,7 @@ public class EditareVaccinForm extends javax.swing.JDialog {
                 .addGap(93, 93, 93)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(numeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dataTextField))
+                    .addComponent(dataLabel))
                 .addGap(57, 57, 57)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(numeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -150,7 +159,7 @@ public class EditareVaccinForm extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dataTextField))
+                    .addComponent(dataLabel))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -226,7 +235,7 @@ public class EditareVaccinForm extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizareVaccinButton;
     private javax.swing.JButton anulareEditareVaccinButton;
-    private javax.swing.JLabel dataTextField;
+    private javax.swing.JLabel dataLabel;
     private com.toedter.calendar.JDateChooser dateChooser;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

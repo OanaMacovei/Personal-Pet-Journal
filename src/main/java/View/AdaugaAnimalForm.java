@@ -1,6 +1,7 @@
 package View;
 import dao.AnimaleData;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -8,6 +9,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import model.Animal;
 import model.Gender;
+import javax.swing.JLabel;
 
 /**
  * Clasa pentru adaugarea unui animal nou in sistem.
@@ -19,20 +21,30 @@ import model.Gender;
 public class AdaugaAnimalForm extends javax.swing.JDialog {
     
     AnimaleData animaleDao;
+    Integer ID_Stapan;
     
     /**
      * Constructorul in care se initializeaza datele, se apeleaza metodele utilizate si se mai mac mici ajustari la interfata.
      * @param parent Fereastra MainFrame pentru centrarea dialogului
      */
-    public AdaugaAnimalForm(java.awt.Frame parent) {
+    public AdaugaAnimalForm(java.awt.Frame parent, Integer ID_Stapan) {
         super(parent, "Adaugare Animal", true);
         this.animaleDao = new AnimaleData();
+        this.ID_Stapan = ID_Stapan;
         initComponents();
         this.setResizable(false);
         setLocationRelativeTo(parent);
         incarcareComboBox();
         realTimeValidation(varstaTextField);
         realTimeValidation(greutateTextField);
+        
+        JLabel[] labels = {numeLabel, specieLabel, varstaLabel, greutateLabel, rasaLabel, genLabel};
+        JTextField[] fields = {numeTextField, specieTextField, rasaTextField, varstaTextField, greutateTextField};
+        Styles.stilizeazaFormularComplet(jPanel1, buttonPanel, labels, fields);
+        Styles.stilizeazaButoane(adaugareButton, stergereButton);
+        Styles.stilizeazaComboBox(genComboBox);
+        adaugareButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        stergereButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     /**
@@ -255,8 +267,16 @@ public class AdaugaAnimalForm extends javax.swing.JDialog {
         String genString = (String) genComboBox.getSelectedItem();
         Gender gen = Gender.valueOf(genString.toUpperCase().trim());
         Animal animalNou = new Animal(null, nume, specie, rasa, varsta, greutate, gen);
-        boolean succes = animaleDao.creeareAnimal(animalNou);
-
+        
+        boolean succes = false;
+        if (animaleDao.verificareDublura(nume, specie, rasa, ID_Stapan)){
+            JOptionPane.showMessageDialog(this, "Exista deja acelasi animal inregistrat!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        else {
+            succes = animaleDao.creeareAnimal(animalNou);
+        }
+        
         if (!succes){
             JOptionPane.showMessageDialog(this, "Eroare la adaugarea animalului", "Eroare", JOptionPane.ERROR_MESSAGE);
         }

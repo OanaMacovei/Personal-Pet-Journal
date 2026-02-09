@@ -4,7 +4,9 @@ import dao.AnimaleData;
 import model.Gender;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Frame;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -37,6 +39,14 @@ public class EditareAnimalForm extends javax.swing.JDialog{
         incarcareComboBox();
         realTimeValidation(varstaTextField);
         realTimeValidation(greutateTextField);
+        
+        JLabel[] labels = {numeLabel, specieLabel, varstaLabel, greutateLabel, rasaLabel, genLabel};
+        JTextField[] fields = {numeTextField, specieTextField, rasaTextField, varstaTextField, greutateTextField};
+        Styles.stilizeazaFormularCompletPanelSingur(dataPanel, labels, fields);
+        Styles.stilizeazaButoane(actualizareAnimalButton, anulareAnimalButton);
+        Styles.stilizeazaComboBox(genComboBox);
+        actualizareAnimalButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        anulareAnimalButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     /**
@@ -135,7 +145,6 @@ public class EditareAnimalForm extends javax.swing.JDialog{
         varstaTextField = new javax.swing.JTextField();
         greutateTextField = new javax.swing.JTextField();
         rasaTextField = new javax.swing.JTextField();
-        buttonPanel = new javax.swing.JPanel();
         actualizareAnimalButton = new javax.swing.JButton();
         anulareAnimalButton = new javax.swing.JButton();
 
@@ -168,10 +177,6 @@ public class EditareAnimalForm extends javax.swing.JDialog{
         dataPanel.setLayout(dataPanelLayout);
         dataPanelLayout.setHorizontalGroup(
             dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dataPanelLayout.createSequentialGroup()
-                .addGap(125, 125, 125)
-                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dataPanelLayout.createSequentialGroup()
                 .addContainerGap(110, Short.MAX_VALUE)
                 .addGroup(dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,9 +230,7 @@ public class EditareAnimalForm extends javax.swing.JDialog{
                 .addGroup(dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(genLabel)
                     .addComponent(genComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(59, 59, 59)
                 .addGroup(dataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(actualizareAnimalButton)
                     .addComponent(anulareAnimalButton))
@@ -321,7 +324,6 @@ public class EditareAnimalForm extends javax.swing.JDialog{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizareAnimalButton;
     private javax.swing.JButton anulareAnimalButton;
-    private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel dataPanel;
     private javax.swing.JComboBox<String> genComboBox;
     private javax.swing.JLabel genLabel;

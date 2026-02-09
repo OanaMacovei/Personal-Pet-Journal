@@ -1,6 +1,7 @@
 package View;
 import dao.IstoricMedicalData;
 import java.awt.Color;
+import java.awt.Cursor;
 import model.IstoricMedical;
 import java.awt.Frame;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,14 @@ public class EditareIstoricMedicalForm extends javax.swing.JDialog {
         initComponents();
         incarcareForm();
         dateChooser.setDate(new Date());
+        
+        Styles.stilizeazaPanouFormular(jPanel1, jPanel2);
+        Styles.stilizeazaTextFields(motivIstoricTextField, numeIstoricTextField, diagnosticIstoricTextField);
+        Styles.stilizeazaTextArea(tratamentIstoricTextField, jScrollPane1);
+        Styles.stilizeazaButoane(actualizareIstoricButton, anulareIstoricButton);
+        Styles.stilizeazaLabeluriBold(jLabel1, jLabel2, jLabel3, jLabel4, jLabel5);
+        actualizareIstoricButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        anulareIstoricButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     /**
@@ -102,7 +111,7 @@ public class EditareIstoricMedicalForm extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         actualizareIstoricButton = new javax.swing.JButton();
-        anulareIstoricTextField = new javax.swing.JButton();
+        anulareIstoricButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -122,10 +131,10 @@ public class EditareIstoricMedicalForm extends javax.swing.JDialog {
         actualizareIstoricButton.addActionListener(this::actualizareIstoricButtonActionPerformed);
         jPanel1.add(actualizareIstoricButton);
 
-        anulareIstoricTextField.setText("Anulare");
-        anulareIstoricTextField.setPreferredSize(new java.awt.Dimension(101, 27));
-        anulareIstoricTextField.addActionListener(this::anulareIstoricTextFieldActionPerformed);
-        jPanel1.add(anulareIstoricTextField);
+        anulareIstoricButton.setText("Anulare");
+        anulareIstoricButton.setPreferredSize(new java.awt.Dimension(101, 27));
+        anulareIstoricButton.addActionListener(this::anulareIstoricButtonActionPerformed);
+        jPanel1.add(anulareIstoricButton);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
@@ -146,7 +155,6 @@ public class EditareIstoricMedicalForm extends javax.swing.JDialog {
         jScrollPane1.setViewportView(tratamentIstoricTextField);
 
         dateChooser.setDateFormatString("dd/MM/yyyy");
-        dateChooser.setPreferredSize(new java.awt.Dimension(111, 26));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -254,14 +262,14 @@ public class EditareIstoricMedicalForm extends javax.swing.JDialog {
      * Eveniment declansat la apasarea butonului de anulare.
      * @param evt Eveniment
      */
-    private void anulareIstoricTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anulareIstoricTextFieldActionPerformed
+    private void anulareIstoricButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anulareIstoricButtonActionPerformed
         this.dispose();
-    }//GEN-LAST:event_anulareIstoricTextFieldActionPerformed
+    }//GEN-LAST:event_anulareIstoricButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizareIstoricButton;
-    private javax.swing.JButton anulareIstoricTextField;
+    private javax.swing.JButton anulareIstoricButton;
     private com.toedter.calendar.JDateChooser dateChooser;
     private javax.swing.JTextField diagnosticIstoricTextField;
     private javax.swing.JLabel jLabel1;

@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import model.DateUtilizator;
+import java.sql.SQLException;
 
 /**
  * Clasa ce gestioneaza operatiunile legate de utilizatori.
@@ -42,5 +43,26 @@ public class UsersDao {
         }
         
         return null;
+    }
+    
+    public boolean signUpUser(String username, String password, String name, String email, String nrTelefon, String rol){
+        String query = "INSERT INTO Utilizatori (username, parola, nume_complet, email, nr_telefon, rol) VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query)){
+            
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            pstmt.setString(3, name);
+            pstmt.setString(4, email);
+            pstmt.setString(5, nrTelefon);
+            pstmt.setString(6, rol);
+            
+            int rowsInserted = pstmt.executeUpdate();
+            return rowsInserted > 0;
+        } catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

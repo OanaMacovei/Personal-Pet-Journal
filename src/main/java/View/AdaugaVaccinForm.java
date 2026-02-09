@@ -5,6 +5,7 @@ import java.util.Date;
 import model.Vaccin;
 import dao.VaccinuriData;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -33,11 +34,17 @@ public class AdaugaVaccinForm extends javax.swing.JDialog {
         super(parent, "Adaugare Vaccin", modal);
         this.ID_Animal = ID_Animal;
         this.vaccinDao = new VaccinuriData();
-        //this.setTitle("Adaugare Vaccin");
         initComponents();
         dateChooser.setDate(new Date()); //trebe dupa initComponents() ca sa fie creat dateChooser
         realTimeValidation(numeTextField);
         
+        Styles.stilizeazaPanouFormular(jPanel1, jPanel2);
+        Styles.stilizeazaTextFields(numeTextField);
+        Styles.stilizeazaButoane(adaugareVaccinButton, anulareVaccinButton);
+        Styles.stilizeazaLabeluriBold(numeLabel, dataLabel);
+        dateChooser.getCalendarButton().setBackground(Styles.DARK_GREY);
+        adaugareVaccinButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        anulareVaccinButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     /**

@@ -2,6 +2,7 @@ package View;
 import java.awt.Frame;
 import dao.HranaData;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -43,6 +44,13 @@ public class EditareHranaForm extends javax.swing.JDialog {
         String textFromFieldForColor = tipHranaTextField.getText().trim();
         cantitateHranaTextField.setBackground(Color.getColor(textFromFieldForColor));
         nr_ziHranaTextField.setBackground(Color.getColor(textFromFieldForColor));
+        
+        Styles.stilizeazaPanouFormular(jPanel1, jPanel2);
+        Styles.stilizeazaTextFields(numeHranaTextField, tipHranaTextField, cantitateHranaTextField, nr_ziHranaTextField);
+        Styles.stilizeazaButoane(actualizareHranaButton, anulareHranaButton);
+        Styles.stilizeazaLabeluriBold(jLabel1, jLabel2, jLabel3, jLabel4);
+        actualizareHranaButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        anulareHranaButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
     
     /**

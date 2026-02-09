@@ -138,4 +138,25 @@ public class AnimaleData {
         }
         return animaleStapan;
     }
+    
+    public boolean verificareDublura(String nume, String specie, String rasa, int ID_Stapan){
+        String query = "SELECT COUNT(*) FROM Animale WHERE nume_animal = ? AND specie = ? AND rasa = ? AND ID_Stapan = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, nume);
+            pstmt.setString(2, specie);
+            pstmt.setString(3, rasa);
+            pstmt.setInt(4, ID_Stapan);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()){
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            System.out.println("Eroare la verificarea dublurii: " + e.getMessage());
+        }
+        return false;
+    }
 }
