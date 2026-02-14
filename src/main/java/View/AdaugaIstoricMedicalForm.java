@@ -22,7 +22,7 @@ import model.IstoricMedical;
 public class AdaugaIstoricMedicalForm extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdaugaIstoricMedicalForm.class.getName());
-    Integer ID_Animal;
+    Integer ID_Animal, ID_Medic;
     IstoricMedicalData istoricDao;
     
     /**
@@ -30,9 +30,10 @@ public class AdaugaIstoricMedicalForm extends javax.swing.JDialog {
      * @param parent Fereastra MainFrame pentru centrarea dialogului
      * @param ID_Animal ID-ul animalului
      */
-    public AdaugaIstoricMedicalForm(Frame parent, Integer ID_Animal) {
+    public AdaugaIstoricMedicalForm(Frame parent, Integer ID_Animal, Integer ID_Medic) {
         super(parent, "Adaugare istoric", true);
         this.ID_Animal = ID_Animal;
+        this.ID_Medic = ID_Medic;
         this.istoricDao = new IstoricMedicalData();
         initComponents();
         dateChooser.setDate(new Date());
@@ -215,7 +216,7 @@ public class AdaugaIstoricMedicalForm extends javax.swing.JDialog {
         }
         
         IstoricMedical istoricNou = new IstoricMedical(0, ID_Animal, data, motiv, numeMedic, diagnostic, tratament);
-        boolean succes = istoricDao.creeareIstoricMedical(istoricNou);
+        boolean succes = istoricDao.creeareIstoricMedical(istoricNou, ID_Medic);
         
         if (!succes){
             JOptionPane.showMessageDialog(this, "Eroare la adaugarea inregistrarii", "Eroare", JOptionPane.ERROR_MESSAGE);

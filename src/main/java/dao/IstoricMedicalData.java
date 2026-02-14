@@ -39,8 +39,7 @@ public class IstoricMedicalData {
         } catch (SQLException e) {
                 e.printStackTrace();
         }
-        return istorice;
-        
+        return istorice;      
     }
     
     
@@ -49,16 +48,17 @@ public class IstoricMedicalData {
      * @param istoric Obiect {@link IstoricMedical}
      * @return true, daca se insereaza coret; false, contrar
      */
-    public boolean creeareIstoricMedical(IstoricMedical istoric){
-         String query = "INSERT INTO IstoricMedical (ID_Animal, data, motiv, diagnostic, tratament, nume_medic) VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean creeareIstoricMedical(IstoricMedical istoric, Integer ID_Medic){
+        String query = "INSERT INTO IstoricMedical (ID_Animal, data, motiv, diagnostic, tratament, nume_medic) VALUES (?, ?, ?, ?, ?, ?)";
+        String updateQuery = "UPDATE Animale SET id_medic = ? WHERE ID_Animal = ? AND id_medic IS NULL";
         
         try (Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            PreparedStatement pstmtUpdate = conn.prepareStatement(updateQuery)) {
             
             java.util.Date dataIstoric = istoric.getData();
             long milisecunde = dataIstoric.getTime();
             Date dataSQL = new Date(milisecunde);
-            
             
             pstmt.setInt(1, istoric.getID_Animal());
             pstmt.setDate(2, dataSQL);
@@ -66,7 +66,13 @@ public class IstoricMedicalData {
             pstmt.setString(4, istoric.getDiagnostic());
             pstmt.setString(5, istoric.getTratament());
             pstmt.setString(6, istoric.getNumeMedic());
-            return pstmt.executeUpdate() > 0;
+            int fisa = pstmt.executeUpdate();
+            
+            pstmtUpdate.setInt(1, ID_Medic);
+            pstmtUpdate.setInt(2, istoric.getID_Animal());
+            pstmtUpdate.executeUpdate();
+            
+            return fisa > 0;
                     
         } catch (SQLException e) {
             e.printStackTrace();

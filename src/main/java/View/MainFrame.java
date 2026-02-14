@@ -1536,7 +1536,8 @@ public class MainFrame extends javax.swing.JFrame {
         int modelRow = TabelAnimale.convertRowIndexToModel(randSelectat);
         Animal animalSelectat = tabelAnimaleModel.getAnimal(modelRow);
         
-        AdaugaIstoricMedicalForm adaugareIstoric = new AdaugaIstoricMedicalForm(this, animalSelectat.getID());
+        //ID_User automat aici reprezinta doctorul
+        AdaugaIstoricMedicalForm adaugareIstoric = new AdaugaIstoricMedicalForm(this, animalSelectat.getID(), ID_User);
         adaugareIstoric.pack();
         adaugareIstoric.setLocationRelativeTo(this);
         adaugareIstoric.setVisible(true);

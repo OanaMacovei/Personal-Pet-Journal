@@ -16,21 +16,29 @@ import model.DateUtilizator;
  */
 
 public class AnimaleData {    
-
+    
+    DateUtilizator user;
     /**
      * Prelucreaza lista tuturor animalelor din baza de date.
      * @return O lista de obiecte {@link Animal}
      */
     public ArrayList<Animal> getAnimale(){
         ArrayList<Animal> animale = new ArrayList<>();
-        String query = "SELECT * FROM Animale";
+        String query;
+        if (user.getRol().equals("MEDIC")){
+            query = "SELECT * FROM Animale WHERE id_medic = ? or id_medic IS NULL";
+        }
+        else {
+            query = "SELECT * FROM Animale WHERE id_stapan = ?";
+        }
          
         try (Connection conn = DatabaseConnection.getConnection();
-                Statement stmt = conn.createStatement();
-                ResultSet result = stmt.executeQuery(query)){
-             
-            while(result.next()){
-                Animal animal = new Animal(result.getInt("ID_Animal"), result.getString("nume_animal"), result.getString("specie"), result.getString("rasa"), result.getInt("varsta"), result.getDouble("greutate"), Gender.valueOf(result.getString("gen")));
+                PreparedStatement pstmt = conn.prepareStatement(query)){
+            
+            pstmt.setInt(1, user.getID_User());
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                Animal animal = new Animal(rs.getInt("ID_Animal"), rs.getString("nume_animal"), rs.getString("specie"), rs.getString("rasa"), rs.getInt("varsta"), rs.getDouble("greutate"), Gender.valueOf(rs.getString("gen")));
                 animale.add(animal);
             }
              

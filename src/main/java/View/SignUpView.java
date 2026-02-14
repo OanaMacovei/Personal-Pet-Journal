@@ -54,7 +54,7 @@ public class SignUpView extends javax.swing.JFrame {
     
     public boolean validareSiCuloareTextField(JTextField textField, String tipValidare){
         String textFromField = textField.getText().trim();
-        String regexCaractere = "^[a-zA-Z][a-zA-Z\\s-]*[a-zA-Z]$";
+        String regexCaractere = "^[a-zA-Z0-9][a-zA-Z0-9\\s-]*[a-zA-Z0-9]$";
         String regexEmail = "^[a-zA-Z]*.[a-zA-Z]*\\d*@[a-zA-z]*.[a-zA-Z]*";
         String regexTelefon = "^[0-9]*";
         
@@ -218,7 +218,7 @@ public class SignUpView extends javax.swing.JFrame {
             return;
         }
         
-        if (!validareSiCuloareTextField(usernameTextField, "nume") || !validareSiCuloareTextField(usernameTextField, "nume") || !validareSiCuloareTextField(passwordTextField, "telefon") || !validareSiCuloareTextField(confirmarePasswordTextField, "telefon") || !validareSiCuloareTextField(emailTextField, "email") || !validareSiCuloareTextField(telefonTextField, "telefon") || !validareSiCuloareTextField(numeTextField, "nume")){
+        if (!validareSiCuloareTextField(usernameTextField, "nume") || !validareSiCuloareTextField(usernameTextField, "nume") || !validareSiCuloareTextField(passwordTextField, "nume") || !validareSiCuloareTextField(confirmarePasswordTextField, "nume") || !validareSiCuloareTextField(emailTextField, "email") || !validareSiCuloareTextField(telefonTextField, "telefon") || !validareSiCuloareTextField(numeTextField, "nume")){
             JOptionPane.showMessageDialog(this, "Corecteaza erorile marcate intai!", "Eroare validare", JOptionPane.ERROR_MESSAGE);
             return;
         }
